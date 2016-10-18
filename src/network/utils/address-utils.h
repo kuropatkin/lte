@@ -27,6 +27,8 @@
 #include "mac64-address.h"
 #include "mac48-address.h"
 #include "mac16-address.h"
+#include "ns3/inet-socket-address.h"
+#include "ns3/inet6-socket-address.h"
 
 namespace ns3 {
 
@@ -115,6 +117,28 @@ void ReadFrom (Buffer::Iterator &i, Mac48Address &ad);
  * \param ad a reference to the Mac16Address to be read
  */
 void ReadFrom (Buffer::Iterator &i, Mac16Address &ad);
+
+class AddressPrinter {
+public:
+	explicit AddressPrinter (Address &address);
+	explicit AddressPrinter (Ipv4Address &address);
+	explicit AddressPrinter (Ipv6Address &address);
+	explicit AddressPrinter (InetSocketAddress &address);
+	explicit AddressPrinter (Inet6SocketAddress &address);
+	/**
+	 * \brief Print the address formated in Ipv4 or Ipv6 format
+	 *
+	 * The print format depends on which address type was used on the constructor
+	 * \param os The output stream to which the address is printed
+	 */
+    void Print (std::ostream &os) const;
+
+	Ipv4Address address;
+	Ipv6Address address6;
+	bool v6;
+};
+
+std::ostream& operator<< (std::ostream& os, AddressPrinter const& address);
 
 namespace addressUtils {
 
